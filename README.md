@@ -16,5 +16,8 @@
 <h1>Ссылки по SQL</h1>
 <div>
   SQLite - dict cursor - https://code-maven.com/slides/python/sqlite-select-dictionary
-  MySQL - PyMySQL на примерах - https://python-scripts.com/pymysql
 </div>
+<div>
+  MySQL - PyMySQL на примерах - https://python-scripts.com/pymysql  
+</div>
+
