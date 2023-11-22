@@ -1,9 +1,15 @@
 # KolpinoNet_TechnicalTGBot
-<h1>Ссылки по aiogram</h1>
 <div>
-  stepik - https://stepik.org/lesson/759408/step/16?unit=761424
-  гайд для aiogram3 - https://mastergroosha.github.io/aiogram-3-guide/buttons/
-  doc - https://docs.aiogram.dev/en/latest/api/index.html
+  <h1>Ссылки по aiogram</h1>
+  <div>
+    stepik - https://stepik.org/lesson/759408/step/16?unit=761424
+  </div>
+  <div>
+    гайд для aiogram3 - https://mastergroosha.github.io/aiogram-3-guide/buttons/
+  </div>
+  <div>
+    doc - https://docs.aiogram.dev/en/latest/api/index.html
+  </div>
 </div>
 
 
