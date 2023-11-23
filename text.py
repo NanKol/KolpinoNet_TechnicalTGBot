@@ -1,3 +1,5 @@
+from aiogram.utils.formatting import as_marked_section, as_key_value
+#Сообщения на команды /<команда>
 start = """Бот запущен!\n
 Используйте /help для просмотра команд бота"""
 
@@ -8,17 +10,21 @@ help = """Список команд бота:
         /check - позоляет проверить исправна ли авария
         """
         
-menu = """Меню:"""
+menu = """Меню:\n\n* - в разработке"""
 
-about_trable = """{emoji} Авария {status_trable}
+#Осталные сообщения
+about_trable = """{emoji} Авария TID:{trouble_id}
 Объект: {adress}
 Время начала: {time_start}
-Длительность: {time}.
+Длительность: {time}
 Узел: {uzel}
 Примечание: {comment}
-Оборудование: {obect}
-Коммент: auto: OFFLINE
+Оборудование: {brand} {model} [{ipaddr}]
+Коммент: {ecomment}
 Кол-во ФЛ: {count_fl}
 Кол-во ЮЛ: {count_ul}"""
 
 result_trable = """Всего существующих аварий: {count_trable}"""
+
+no_trables = """Аварии не найдены."""
+
