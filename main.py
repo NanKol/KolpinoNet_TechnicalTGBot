@@ -1,18 +1,17 @@
 import asyncio
 import config
 import db
-import sqlite3
 
 from datetime import datetime
 
+import sqlite3
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.types.bot_command import BotCommand
 
-import pymysql
-
+import emoji 
 import text
 import keyboards
 
@@ -30,92 +29,150 @@ dp = Dispatcher()
 @dp.message(Command("start"))
 async def cmd_start_bot(message: types.Message):
     await message.answer(text=text.start)
+    await message.delete()
 
 
 @dp.message(Command("help"))
 async def cmd_help(message: types.Message):
     await message.answer(text=text.help)
+    await message.delete()
 
 
 @dp.message(Command("menu"))
 async def cmd_menu(message: types.Message):
     await message.answer(text=text.menu, reply_markup=keyboards.kb_menu)
+    await message.delete()
 
 
 @dp.callback_query(F.data == "Show_Trables")
 async def Show_Trables(callback: types.CallbackQuery):
     await callback.answer(text="Поиск аварий...")
-    # con = sqlite3.connect("test.db")
-    # con.row_factory = sqlite3.Row
-    # cur = con.cursor()
-    # 
-    # await callback.message.answer(text="Перед циклом")
-    # rows = cur.execute("""<ЗАПРОС>""").fetchall()
-    # print(rows)
-    # for row in rows:
-    #     await callback.message.answer(text=f"""Авария
-    #                            Примечание: {row['comment']}
-    #                            Начало: {row['date_start']}
-    #                            Оборудование: {row['brand']} {row['model']} [{row['ipaddr']}]
-    #                            Коментарий: {row['brand']}""")
-
-    with pymysql.connect() as connection:
-        with connection.cursor() as cursor:
-            
-            cursor.execute(db.search_troubles)
-            rows = cursor.fetchall()
-            
-            cursor.execute(db.count_fl)
-            count_fl = cursor.fetchone()
-            cursor.execute(db.count_yl)
-            count_yl = cursor.fetchone()
-            
-            for row in rows:
-                await callback.message.answer(text = text.about_trable.format(emoji="EMOJI",
-                                                    time_start = datetime.datetime.fromtimestamp(int(row["date_start"])).strftime('%Y-%m-%d %H:%M:%S'),
-                                                    time = "Продолжительность аварии",
-                                                    adress = row["location"],
-                                                    uzel = "УЗЕЛ",
-                                                    comment = row["ecomment"],
-                                                    obect = "ОБЪЕКТ",
-                                                    count_fl = count_fl['fl'],
-                                                    count_ul = count_fl['yl']),
-                                              reply_markup=keyboards.check_trouble())
-                return
-    await callback.message.answer(text=text.no_trables)
+    
+    con = sqlite3.connect("Test.db")
+    cursor = con.cursor()
+    con.row_factory = sqlite3.Row
+    cursor.execute(db.search_troubles)
+    rows = cursor.fetchall()
+    
+    if(not row):
+        await callback.message.answer(text=text.no_trables)
+        return
+    
+    for row in rows:
+        cursor.execute(db.count_fl.format(equipment_id=row['eqid']))
+        count_fl = cursor.fetchone()
+        cursor.execute(db.count_yl.format(equipment_id=row['eqid']))
+        count_yl = cursor.fetchone()
+        
+        if row['date_end'] <= 0:
+            smile = emoji.emojize(":red_circle:")
+        else:
+            smile = emoji.emojize(":green_circle:")
+        
+        # time = 
+        await callback.message.answer(text = text.about_trable.format(emoji=smile,
+                                            time_start = datetime.fromtimestamp(int(row["date_start"])).strftime('%Y-%m-%d %H:%M:%S'),
+                                            time = (datetime.now() - datetime.fromtimestamp(int(row["date_start"]))).time(),
+                                            time_end = "",
+                                            adress = row["location"],
+                                            uzel = "ОНО СУЩЕСТВУЕТ, но это не точно",
+                                            comment = row["ecomment"],
+                                            count_fl = count_fl['fl'],
+                                            count_yl = count_yl['yl']),
+                                        reply_markup=keyboards.trouble_menu())
     
     
 @dp.callback_query(F.data == "Result_Trables")
 async def Result_Trables(callback: types.CallbackQuery):
     await callback.answer(text="Поиск аварий")
-    with pymysql.connect() as connection:
-        with connection.cursor() as cursor:
-            
+    
+    with sqlite3.connect("Test.db") as connection:
+        connection.row_factory = sqlite3.Row
+        with connection.cursor() as cursor: 
             cursor.execute(db.search_truble)
             row = cursor.fetchone()
             
-            await callback.message.answer(text=text.result_trable.format(count_trable=row['ct']))
+            await callback.message.answer(text=text.result_trable.format(count_trable=row['ct']))   
+            
+            
+@dp.callback_query(F.data.startswich("UpdateTrouble_id:"))
+async def update_trouble(callback: types.CallbackQuery):
     
+    with sqlite3.connect("Test.db") as connection:
+        connection.row_factory = sqlite3.Row
+        with connection.cursor() as cursor:
+            cursor.execute(db.search_troubles)
+            rows = cursor.fetchall()
+            
+            if(not row):
+                await callback.message.answer(text=text.no_trables)
+                return
+            
+            for row in rows:
+                cursor.execute(db.count_fl.format(equipment_id=row['eqid']))
+                count_fl = cursor.fetchone()
+                cursor.execute(db.count_yl.format(equipment_id=row['eqid']))
+                count_yl = cursor.fetchone()
+                
+                if row['date_end'] <= 0:
+                    smile = emoji.emojize(":red_circle:")
+                else:
+                    smile = emoji.emojize(":green_circle:")
+            
+            for row in rows:
+                await callback.message.edit_text(text = text.about_trable.format(emoji=smile,
+                                                    time_start = datetime.fromtimestamp(int(row["date_start"])).strftime('%Y-%m-%d %H:%M:%S'),
+                                                    time = (datetime.now() - datetime.fromtimestamp(int(row["date_start"]))).time(),
+                                                    time_end = f"Время конца:{datetime.fromtimestamp(int(row['date_end'])).strftime('%Y-%m-%d %H:%M:%S')}",
+                                                    adress = row["location"],
+                                                    uzel = "ОНО СУЩЕСТВУЕТ, но это не точно",
+                                                    comment = row["ecomment"],
+                                                    count_fl = count_fl['fl'],
+                                                    count_ul = count_yl['yl']),
+                                                    reply_markup=keyboards.trouble_menu())
+    
+    
+@dp.callback_query(F.data =="Delete_Message")
+async def delete_message(callback: types.CallbackQuery):
+    await callback.message.delete()
+    
+@dp.message()
+async def info_id(message: types.Message, chat: types.Chat):
+    await message.answer(text=f"user_id: {message.from_user.id}\nid_chat:{chat.id}")
 # async def background_cheking_troubles():
-#     with pymysql.connect() as connection:
-#         with connection.cursor() as cursor:
+#     connection = db.get_connct_sqllite()
+#     with connection.cursor() as cursor:
+#         cursor.execute(db.background_search_troubles)
+#         rows = cursor.fetchall()
+        
+#         if(not row):
+#             await bot.message.answer(text=text.no_trables)
+#             return
+        
+#         for row in rows:
+#             cursor.execute(db.count_fl.format(equipment_id=row['eqid']))
+#             count_fl = cursor.fetchone()
+#             cursor.execute(db.count_yl.format(equipment_id=row['eqid']))
+#             count_yl = cursor.fetchone()
             
-#             cursor.execute(db.background_search_troubles)
-#             rows = cursor.fetchall()
-            
-#             for row in rows:
-#                 await bot.send_message()
-#                 await callback.message.answer(text = text.about_trable.format(emoji="EMOJI",
-#                                                                 trouble_id=row['tid']
-#                                                                 time_start = datetime.datetime.fromtimestamp(int(row["date_start"])).strftime('%Y-%m-%d %H:%M:%S'),
-#                                                                 time = "Продолжительность аварии",
-#                                                                 adress = row["location"],
-#                                                                 uzel = "УЗЕЛ",
-#                                                                 comment = row["ecomment"],
-#                                                                 count_fl = "КОЛ-ВО ФЛ",
-#                                                                 count_ul = "КОЛ-ВО ЮЛ"))
-#                 cursor.execute(db.background_search_troubles_confirm.format(trouble_id=row['tid']))
-#                 connection.commit()
+#             if row['date_end'] <= 0:
+#                 smile = emoji.emojize(":red_circle:")
+#             else:
+#                 smile = emoji.emojize(":green_circle:")
+        
+#         for row in rows:
+#             await bot.send_message(chat_id=,text = text.about_trable.format(emoji=smile,
+#                                                 time_start = datetime.fromtimestamp(int(row["date_start"])).strftime('%Y-%m-%d %H:%M:%S'),
+#                                                 time = (datetime.now() - datetime.fromtimestamp(int(row["date_start"]))).time(),
+#                                                 time_end = f"Время конца:{datetime.fromtimestamp(int(row['date_end'])).strftime('%Y-%m-%d %H:%M:%S')}",
+#                                                 adress = row["location"],
+#                                                 uzel = "ОНО СУЩЕСТВУЕТ, но это не точно",
+#                                                 comment = row["ecomment"],
+#                                                 count_fl = count_fl['fl'],
+#                                                 count_ul = count_yl['yl']),
+#                                                 reply_markup=keyboards.trouble_menu())
+#             cursor.execute(db.background_search_troubles_confirm.format(trouble_id=row['tid']))
+#             connection.commit()
                 
             
             

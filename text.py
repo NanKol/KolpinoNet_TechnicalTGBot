@@ -24,7 +24,7 @@ about_trable = """{emoji} Авария TID:{trouble_id}
 Кол-во ФЛ: {count_fl}
 Кол-во ЮЛ: {count_ul}"""
 
-result_trable = """Всего существующих аварий: {count_trable}"""
+result_trables = """Всего существующих аварий: {count_trable}"""
 
 no_trables = """Аварии не найдены."""
 

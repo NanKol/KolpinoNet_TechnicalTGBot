@@ -8,10 +8,12 @@ kb_menu = InlineKeyboardMarkup(inline_keyboard=
                                 [InlineKeyboardButton(text="*Проверить аварию", callback_data="Check_Trable")]
                                 ])
 
-def check_trouble(trouble_id):
+def trouble_menu(trouble_id):
     kb_builder = InlineKeyboardBuilder()
+    buttons = [InlineKeyboardButton(text="Проверить аварию", callback_data=f"Update_Trouble_id:{trouble_id}"),
+               InlineKeyboardButton(text="Удалить сообщение", callback_data=f"Delete_Massage")]
     
-    InlineKeyboardBuilder.button(text="Проверить аварию", callback_data=f"trouble_id:{trouble_id}")
+    kb_builder.row(*buttons, width=2)
     
     return kb_builder.as_markup()
     
