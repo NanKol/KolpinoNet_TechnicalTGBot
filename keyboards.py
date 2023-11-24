@@ -11,7 +11,7 @@ kb_menu = InlineKeyboardMarkup(inline_keyboard=
 def trouble_menu(trouble_id):
     kb_builder = InlineKeyboardBuilder()
     buttons = [InlineKeyboardButton(text="Проверить аварию", callback_data=f"Update_Trouble_id:{trouble_id}"),
-               InlineKeyboardButton(text="Удалить сообщение", callback_data=f"Delete_Massage")]
+               InlineKeyboardButton(text="Удалить сообщение", callback_data=f"Delete_Message")]
     
     kb_builder.row(*buttons, width=2)
     

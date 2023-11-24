@@ -8,7 +8,14 @@ import config
 def get_connect_mysql():
   return pymysql.connect()
 
-engine = sql.create_engine('sqlite:///myDatabase.db')
+engine = sql.create_engine('sqlite:///Test.db')
+
+con = engine.connect()
+
+metadate = sql.MetaData()
+
+trouble_model = sql.Table("trubles", metadate, 
+                          sql.Column('id', ))
 
 # вернуть UNIX_TIMESTAMP(t.date_start) и UNIX_TIMESTAMP(t.date_end) и UNIX_TIMESTAMP(t.plan_time)
 search_troubles = """SELECT

@@ -16,13 +16,13 @@ menu = """Меню:\n\n* - в разработке"""
 about_trable = """{emoji} Авария TID:{trouble_id}
 Объект: {adress}
 Время начала: {time_start}
-Длительность: {time}
+Длительность: {time}"""+ """{time_end}""" +"""
 Узел: {uzel}
 Примечание: {comment}
 Оборудование: {brand} {model} [{ipaddr}]
 Коммент: {ecomment}
 Кол-во ФЛ: {count_fl}
-Кол-во ЮЛ: {count_ul}"""
+Кол-во ЮЛ: {count_yl}"""
 
 result_trables = """Всего существующих аварий: {count_trable}"""
 
