@@ -1,22 +1,9 @@
-# import config
-import configparser
+import sqlite3
+from datetime import datetime
 
-
-config = configparser.ConfigParser()
-
-config.sections()
-
-config['DB'] = {'db_name': "DataBaseName",
-                'Host': "LocalHost",
-                'db_port:': "3306",
-                'Charset': "utf-8"}
-
-# config['DB']['USER'] = {'Name': "name",
-#                         'Password': "password"}
-
-config['BOT'] = {'token': "TOKEN",
-                 'group_id': {"-123213123","31231231","231213"}}
-
-with open('example.ini', 'w') as configfile:
-    config.write(configfile)
-# config['BOT']
+with sqlite3.connect("test.db") as con:
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    date = datetime.now()#.strftime('%Y-%m-%d %H:%M:%S')
+    print(date)
+    cur.execute(f"""UPDATE troubles SET date_start = '{date}', date_end = 0, plan_time = 0 WHERE id in (2, 3)""")
