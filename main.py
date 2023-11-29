@@ -306,6 +306,7 @@ async def background_cheking_troubles(bot: Bot):
             
         await bot.send_message(chat_id=conf['BOT']['group_id'],**t.as_kwargs(),
                                         reply_markup=keyboards.trouble_menu(trouble_id=row['tid']))
+        cursor.execute(db.background_search_troubles_confirm.format(trouble_id=row['tid']))
 
         await asyncio.sleep(1)
         
