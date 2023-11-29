@@ -7,8 +7,9 @@ import emoji
 
 
 kb_menu = InlineKeyboardMarkup(inline_keyboard=
-                               [[InlineKeyboardButton(text="Показать все аварии", callback_data="Show_Troubles")],
-                                [InlineKeyboardButton(text="Итог по авариям", callback_data="Count_Troubles")]
+                               [[InlineKeyboardButton(text=f"Показать все аварии{emoji.emojize(':magnifying_glass_tilted_left:')}", 
+                                                      callback_data="Show_Troubles")],
+                                [InlineKeyboardButton(text=f"Итог по авариям{emoji.emojize(':clipboard:')}", callback_data="Count_Troubles")]
                                 ])
 
 def trouble_menu(trouble_id):
