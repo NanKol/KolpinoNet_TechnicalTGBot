@@ -93,8 +93,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=<Юзер от которого буте запускаться>
-WorkingDirectory=<директория /home/username/Python_TG_bot>
+User=<Юзер от которого будет запускаться>
+WorkingDirectory=<директория бота /home/username/Python_TG_bot>
 ExecStart=</home/username/Python_TG_bot/venv/bin/python3 /home/username/Python_TG_Bot/main.py
 Restart=always
 
