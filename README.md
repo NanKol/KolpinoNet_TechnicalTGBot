@@ -29,7 +29,8 @@ git clone https://github.com/NanKol/KolpinoNet_TechnicalTGBot.git
   python3 --version
 ```
 
-Нам нужна версия 3.9+, если версия ниже, то ставим нужный
+Нам нужна версия 3.8+, если версия ниже, то ставим нужный.
+Тестировался на 3.10
 
 ```bash
   тут сложнее
