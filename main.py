@@ -22,7 +22,6 @@ import logging
 
 
 conf = config.get_config()
-logging.basicConfig(level=logging.INFO)
 if conf['SETTING']['log_to_file'].lower() == None:
     logging.basicConfig(level=logging.INFO, 
                         filemode="w",
@@ -328,8 +327,7 @@ async def main():
                                BotCommand(command="check", description="Проверка аварии: \n/check <ip или TID> <XXX.XXX.XXX.XXX или XXX>")])
     
     scheduler = AsyncIOScheduler()
-    if (conf['BOT']['channel_trouble_start_id'] != "0" or conf['BOT']['channel_trouble_end_id'] != "0") and (
-        int(conf['BOT']['interval_background_check_trouble']) > 0): 
+    if int(conf['BOT']['interval_background_check_trouble']) > 0: 
         
         scheduler.add_job(background_cheking_troubles, 'interval', 
                           seconds=int(conf['BOT']['interval_background_check_trouble']),
