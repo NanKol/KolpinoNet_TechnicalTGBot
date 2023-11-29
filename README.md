@@ -82,20 +82,20 @@ sudo nano config.ini
 ```
 Создаём файл
 ```bash
-sudo nano Python_TG_Bot.service
+sudo nano KolpinoNet_TechnicalTGBot.service
 ```
 и заполняем 
 ```bash
 [Unit]
-Description=<Описание>
+Description=<KolpinoNet_TechnicalTGBot>
 After=syslog.target
 After=network.target
 
 [Service]
 Type=simple
 User=<Юзер от которого будет запускаться>
-WorkingDirectory=<директория бота /home/username/Python_TG_bot>
-ExecStart=</home/username/Python_TG_bot/venv/bin/python3 /home/username/Python_TG_Bot/main.py
+WorkingDirectory=<директория бота /home/username/KolpinoNet_TechnicalTGBot>
+ExecStart=</home/username/Python_TG_bot/venv/bin/python3 /home/username/KolpinoNet_TechnicalTGBot/main.py
 Restart=always
 
 [Install]
