@@ -1,3 +1,5 @@
+"""Модёль чтения конфига"""
+
 import configparser
 
 def get_config():
@@ -5,7 +7,6 @@ def get_config():
     config.read("config.ini")
     
     return config
-conf = get_config()
 
 
 #TOKEN = 6434306263:AAH8JZtJCqSDp0zafl759UyGm5QqFLDvjpU

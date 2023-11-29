@@ -1,6 +1,4 @@
-import random
-import string
-
+"""Хранится и генерируются сообщения бота"""
 from aiogram.utils.formatting import Text, Bold
 
 #Сообщения на команды /<команда>
@@ -12,47 +10,34 @@ help = """Список команд бота:
         /help - выводит информацию о доступных командах
         /menu - выводит меню
         /check - позоляет проверить исправна ли авария
-Проверка аварии: \n/check <ip или TID> <XXX.XXX.XXX.XXX или XXX>
-        """
+Проверка аварии: \n/check <ip или TID> <XXX.XXX.XXX.XXX или XXX>"""
         
-menu = """Меню:"""# \n\n* - в разработке
+menu = """Меню:"""
+
 
 #Осталные сообщения
-about_trable = """{emoji} Авария TID:{trouble_id}
-Объект: {adress}
-Время начала: {time_start}
-Длительность: {time}"""+ """{time_end}""" + """\nУзел: {uzel}
-Примечание: {ecomment}
-Оборудование: {brand} {model} [{ipaddr}]
-Коммент: {comment}
-Кол-во ФЛ: {count_fl}
-Кол-во ЮЛ: {count_yl}"""
-
 count_trables = """На данный момент аварий: {count_trable}"""
 
 no_trables = """Аварии не найдены."""
 
-# def about_trouble(emoji, trouble_id, adress, time_start, 
-#                   time, time_end,uzel, comment, brand,model, 
-#                   ipaddr,ecomment,count_fl,count_yl,*args):
+def about_trouble(emoji, trouble_id, adress, time_start, 
+                  time, time_end:str,uzel, comment, brand,model, 
+                  ipaddr,ecomment,count_fl,count_yl):
         
-#         text = Text(f"{emoji} Авария TID:{trouble_id}",
-#              f"Объект: {adress}",
-#              f"Время начала: {time_start}",
-#              f"Длительность: {time}",
-#              f"{time_end}",
-#              f"Узел: {uzel}",
-#              f"Примечание: {comment}",
-#              f"Оборудование: {brand} {model} [{ipaddr}]",
-#              f"Коммент: {ecomment}",
-#              f"Кол-во ФЛ: {count_fl}",
-#              f"Кол-во ЮЛ: {count_yl}")
+        pre_time_end = "Время конца: "
+        if len(time_end) == 0:
+                pre_time_end = ""
         
-#         return text
-
-
-
-# def generate_random_string(length) -> str:
-#     letters = string.ascii_lowercase
-#     rand_string = ''.join(random.choice(letters) for i in range(length))
-#     print("Random string of length", length, "is:", rand_string)
+        text = Text(f"{emoji} Авария TID: {trouble_id}\n",
+             Bold("Объект: "), f"{adress}\n",
+             Bold("Время начала: "), f"{time_start}\n",
+             Bold("Длительность: "), f"{time}\n",
+             Bold(pre_time_end), f"{time_end}",
+             Bold("Узел: "), f"{uzel}\n",
+             Bold("Примечание: "), f"{comment}\n",
+             Bold("Оборудование: "), f"{brand} {model} [{ipaddr}]\n",
+             Bold("Коммент: "), f"{ecomment}\n",
+             Bold("Кол-во ФЛ: "), f"{count_fl}\n",
+             Bold("Кол-во ЮЛ: "), f"{count_yl}\n")
+        
+        return text

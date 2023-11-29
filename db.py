@@ -1,11 +1,7 @@
+"""Запросы и функции для взаимодействия с БД"""
 import pymysql, pymysql.cursors
-import sqlite3
 import config
 
-# def get_connect_sqlite() -> sqlite3.Connection:
-#   con = sqlite3.connect("Test.db")
-#   con.row_factory = sqlite3.Row
-#   return con
 
 def get_connect_mysql():
   conf = config.get_config()['DB']
@@ -58,8 +54,8 @@ search_trouble = """SELECT
 
 # вернуть UNIX_TIMESTAMP(t.date_start) и UNIX_TIMESTAMP(t.date_end) и UNIX_TIMESTAMP(t.plan_time)
 background_search_troubles = """SELECT t.id as tid,
-                                  t.date_start as date_start,
-                                  t.date_end as date_end,
+                                  UNIX_TIMESTAMP(t.date_start) as date_start,
+                                  UNIX_TIMESTAMP(t.date_end) as date_end,
                                   e.brand,e.model,e.ipaddr,e.comment as ecomment,
                                   t.objid,
                                   ond.location,
@@ -67,15 +63,16 @@ background_search_troubles = """SELECT t.id as tid,
                                   a.adm_fullname,
                                   t.eqid,
                                   t.plan,
-                                  t.plan_time as plan_time
+                                  UNIX_TIMESTAMP(t.plan_time) as plan_time
                                 FROM troubles as t
                                   LEFT JOIN admins as a ON (a.adm_id=t.openadm)
                                   LEFT JOIN equipment as e ON (e.id=t.eqid)
                                   LEFT JOIN objects as o ON (o.id=t.objid)
                                   LEFT JOIN objects_nodes as ond ON (ond.id=t.nodeid)
-                                WHERE e.online="FALSE" AND t.date_end=0 AND t.sent2tgm=0"""
+                                WHERE (e.online=0 AND t.date_end=0 AND t.sent2tgm=0) OR 
+	                                    (e.online=1 AND t.date_end>0 AND t.sent2tgm=1)"""
 
-background_search_troubles_confirm = "UPDATE troubles SET sent2tgm=1 WHERE id={trouble_id}"
+background_search_troubles_confirm = "UPDATE troubles SET sent2tgm=(sent2tgm + 1) WHERE id={trouble_id}"
 
 # вернуть UNIX_TIMESTAMP(t.date_start) и UNIX_TIMESTAMP(t.date_end) и UNIX_TIMESTAMP(t.plan_time)
 update_trouble = """SELECT 
