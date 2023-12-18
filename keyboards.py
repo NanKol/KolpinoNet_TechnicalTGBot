@@ -24,4 +24,8 @@ def trouble_menu(trouble_id):
     return kb_builder.as_markup()
     
 count_trables_menu = InlineKeyboardMarkup(inline_keyboard=
-                                          [[InlineKeyboardButton(text="Обновить", callback_data=f"Update_Count_Trouble"),],])
+                                          [[InlineKeyboardButton(text=f"Удалить {emoji.emojize(':litter_in_bin_sign:')}", 
+                                                                 callback_data=f"Delete_Message"), InlineKeyboardButton(text=f"Обновить {emoji.emojize(':check_box_with_check:')}", callback_data=f"Update_Count_Trouble")],])
+
+delete = InlineKeyboardMarkup(inline_keyboard=
+                                          [[InlineKeyboardButton(text=f"Удалить {emoji.emojize(':litter_in_bin_sign:')}"),]])

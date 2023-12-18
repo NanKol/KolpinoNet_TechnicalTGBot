@@ -1,28 +1,30 @@
 """Внешнии функции"""
+import asyncio
+import logging
 import db
 
 
-def getobjectname(cursor, objid) -> str:
+async def getobjectname(cursor, objid) -> str:
     """Возвращает полный адрес"""
     
     if (int(objid) > 0):
-        cursor.execute(db.get_street_elm.format(objid = objid))
+        await cursor.execute(db.get_street_elm.format(objid = objid))
         
-        rows = cursor.fetchall()
-        
+        rows = await cursor.fetchall()
         for curobj in rows:
-            fulladdr = getstreet(cursor, curobj['street']) + curobj['dom']
+            fulladdr = await getstreet(cursor, curobj['street']) + ", дом " + curobj['dom']
             if(len(curobj['korp']) > 0):
-                fulladdr += curobj ['korp']
+                fulladdr += f", корп {curobj['korp']}"
             return fulladdr
 
 
-def getstreet(cursor, streetid) -> str:
+async def getstreet(cursor, streetid) -> str:
     """Возращает улицу"""
+    
     if (int(streetid) > 0):
-        cursor.execute(db.get_street.format(streetid = streetid))
+        await cursor.execute(db.get_street.format(streetid = streetid))
         
-        rows = cursor.fetchall()
+        rows = await cursor.fetchall()
         
         for currstreet in rows:
             strname = currstreet['cityname'] + ", " + currstreet['street']
