@@ -28,7 +28,7 @@ def about_trouble(emoji, trouble_id, adress, time_start,
         if len(time_end) == 0:
                 pre_time_end = ""
         
-        text = Text(f"{emoji} Авария TID: {trouble_id}\n",
+        text = Text(Bold(f"{emoji} Авария TID:"), f"{trouble_id}\n",
              Bold("Объект: "), f"{adress}\n",
              Bold("Время начала: "), f"{time_start}\n",
              Bold("Длительность: "), f"{time}\n",
