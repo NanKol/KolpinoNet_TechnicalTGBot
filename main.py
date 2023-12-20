@@ -98,7 +98,7 @@ async def cmd_menu(message: types.Message, command: CommandObject):
                 await cursor.execute(db.search_trouble.format(reque_param = reque_param))
                 rows = await cursor.fetchall()
     except aiomysql.MySQLError as e:
-        logging.critical(f"Error connecting to MySQL: {e}")
+        logging.critical(f"Ошибка подключения к БД mysql: {e}")
         return
     
     
